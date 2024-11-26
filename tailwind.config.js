@@ -5,10 +5,20 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        delius: ['Delius', 'cursive'], // Add Delius font
+      },
+    }
   },
   plugins: [
-    // eslint-disable-next-line no-undef
     require('daisyui'),
   ],
+  daisyui: {
+    themes: [
+      "light",
+      "dark",
+      "nord",
+    ],
+  },
 }
