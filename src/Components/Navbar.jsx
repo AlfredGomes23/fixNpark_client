@@ -1,12 +1,11 @@
 import { IoLocationSharp } from "react-icons/io5";
 import { HiOutlineMail } from "react-icons/hi";
 import { FaFacebookF, FaLinkedinIn, FaTwitter } from "react-icons/fa";
-import { CiDark, CiLight } from "react-icons/ci";
 
 const Navbar = () => {
 
     return (
-        <nav className="navbar grid grid-cols-3 fixed bg-[#ebf2f1] bg-opacity-75">
+        <nav className="navbar grid grid-cols-3 fixed bg-[#ebf2f1] bg-opacity-75 z-10">
             {/* logo */}
             <div className="justify-center col-span-1 row-span-2">
                 <a className="btn btn-ghost text-xl">fixNpark</a>
@@ -28,7 +27,7 @@ const Navbar = () => {
             </div>
 
             {/* navbar links */}
-            <div className="flex flex-row justify-around col-span-2 h-8">
+            <div className="flex flex-row justify-around col-span-2 h-10">
                 <ul className="menu menu-horizontal px-1 text-base text-[#4f7369] font-semibold">
                     <li><a>Home</a></li>
                     <li><a>About</a></li>
