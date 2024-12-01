@@ -8,7 +8,6 @@ export default {
     extend: {
       fontFamily: {
         delius: ['Delius', 'cursive'],
-        'twinkle-star': ["Twinkle Star", 'cursive'],
         'potta-one': ["Potta One", "system-ui"],
       },
     }

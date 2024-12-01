@@ -40,7 +40,7 @@ const Reviews = () => {
             {
                 reviews.map(review => 
                     <SwiperSlide key={review._id}>
-                        <div className="card bg-slate-500 text-neutral-content w-96 h-52">
+                        <div className="card bg-gray-700 text-neutral-content w-96 h-52">
                             <div className="card-body items-center text-center">
                                 <h2 className="card-title indicator">
                                     <span className='flex flex-row gap-1'>
