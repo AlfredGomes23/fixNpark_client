@@ -1,21 +1,84 @@
 import { useForm } from "react-hook-form"
+import { AuthContext } from "../Providers/AuthProvider";
+import { useContext, useState } from "react";
+import Swal from 'sweetalert2'
+import { BiLoaderCircle } from "react-icons/bi";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const SigninSignup = () => {
+    const { user, createUser, signinUser } = useContext(AuthContext);
+    const [err, setErr] = useState("");
+    const [doing, setDoing] = useState(false);
+    const location = useLocation();
+    const navigate = useNavigate();
+
     // signin
-    const { register: signin, handleSubmit: handleSigninSubmit, watch: watchIn, formState: { errors: inErr } } = useForm();
-    const onSignin = data => {
-        console.log(data);
+    const { register: signin, handleSubmit: handleSigninSubmit, watch: watchIn, formState: { errors: signinErr } } = useForm();
+
+    const onSignin = async data => {
+        setDoing(true);
+        // console.log(data);
+
+        try {
+            await signinUser(data.email, data.password);
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Signin Successful",
+                showConfirmButton: false,
+                timer: 2000
+            });
+            // navigate where user was going
+            navigate(location?.state ? location.state : '/');
+        } catch (err) {
+            // console.log(err);
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: err,
+                showConfirmButton: false,
+                timer: 3000
+            });
+        }
+        setDoing(false);
     };
+
+
     // signup
-    const { register: signup, handleSubmit: handleSignupSubmit, watch: watchUp, formState: { errors: upErr } } = useForm();
-    const onSignup = data => {
-        console.log(data);
+    const { register: signup, handleSubmit: handleSignupSubmit, watch: watchUp, formState: { errors: signupErr } } = useForm();
+
+    const onSignup = async data => {
+        setDoing(true);
+        // console.log(data);
+
+        try {
+            await createUser(data.email, data.password);
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Account Registered",
+                showConfirmButton: false,
+                timer: 2000
+            });
+            // navigate where user was going
+            navigate(location?.state ? location.state : '/');
+        } catch (err) {
+            console.log(err);
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: err,
+                showConfirmButton: false,
+                timer: 3000
+            });
+        }
+        setDoing(false);
     };
 
     return (
         <div className="flex flex-col lg:flex-row bg-gradient-to-r from-accent to-primary">
             {/* signin */}
-            <div className="hero min-h-screen mb-10" data-aos="slide-left">
+            <div className="hero min-h-screen mb-10">
                 <div className="hero-content flex-col">
                     <div className="text-center lg:text-left">
                         <p className="font-bold">Have an account?</p>
@@ -38,14 +101,16 @@ const SigninSignup = () => {
                                 <input type="password" name="password" placeholder="password" className="input input-bordered" required {...signin("password")} />
                             </div>
                             <div className="form-control">
-                                <button className="btn btn-accent w-fit mx-auto">Signin</button>
+                                {
+                                    doing ? <span className="loading loading-dots loading-lg mx-auto text-center text-primary"></span> : <button className="btn btn-accent w-fit mx-auto">Signin</button>
+                                }
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
             {/* signup */}
-            <div className="hero min-h-screen mb-10" data-aos="slide-right">
+            <div className="hero min-h-screen mb-10">
                 <div className="hero-content flex-col">
                     <div className="text-center lg:text-left text-neutral-content">
                         <p className="font-bold">New here?</p>
@@ -69,7 +134,7 @@ const SigninSignup = () => {
                                     </label>
                                     <input type="text"
                                         name="url"
-                                        placeholder="Photo URL" className="input input-bordered" required {...signup("url")}/>
+                                        placeholder="Photo URL" className="input input-bordered" required {...signup("url")} />
                                 </div>
                             </div>
                             {/* email password */}
@@ -80,23 +145,27 @@ const SigninSignup = () => {
                                     </label>
                                     <input type="email"
                                         name="email"
-                                        placeholder="email" className="input input-bordered" required {...signup("email")}/>
+                                        placeholder="email" className="input input-bordered" required {...signup("email")} />
                                 </div>
                                 <div className="form-control">
                                     <label className="label">
                                         <span className="label-text font-semibold">Password</span>
                                     </label>
                                     <input type="password"
-                                        name="password" placeholder="password" className="input input-bordered" required {...signup("password")}/>
+                                        name="password" placeholder="password" className="input input-bordered" required {...signup("password", { pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/ })} />
                                 </div>
                             </div>
+                            {signupErr.email && <p className="text-center text-error font-semibold">Enter a Valid Email Address</p>}
+                            {signupErr.password && <p className="text-center text-error font-semibold w-96 mx-auto">Password MUST contain Minimum 6 characters Including at least a Upper, a Lower case letter, also a Number</p>}
                             <label className="label mx-auto">
                                 <input type="checkbox" name="checkbox" id="" required {...signup("termsConditions")} />
                                 <p className="label-text-alt link link-hover ml-2 text-secondary">Accept our terms and conditions</p>
                             </label>
 
                             <div className="form-control mt-6">
-                                <button className="btn btn-primary w-fit mx-auto">Signup</button>
+                                {
+                                    doing ? <span className="loading loading-dots loading-lg mx-auto text-center text-primary"></span> : <button className="btn btn-primary w-fit mx-auto">Signup</button>
+                                }
                             </div>
                         </form>
                     </div>

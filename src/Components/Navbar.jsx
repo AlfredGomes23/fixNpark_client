@@ -2,8 +2,33 @@ import { IoLocationSharp } from "react-icons/io5";
 import { HiOutlineMail } from "react-icons/hi";
 import { FaFacebookF, FaLinkedinIn, FaTwitter } from "react-icons/fa";
 import { Link, NavLink } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../Providers/AuthProvider";
+import Swal from 'sweetalert2'
 
 const Navbar = () => {
+    const { user, sign_out } = useContext(AuthContext);
+
+    const handleSignOut = async () => {
+        try {
+            await sign_out();
+            Swal.fire({
+                position: "center",
+                icon: "warning",
+                title: "You are Signed Out.",
+                showConfirmButton: false,
+                timer: 1500
+            });
+        } catch (err) {
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: err,
+                showConfirmButton: false,
+                timer: 1000
+            });
+        }
+    };
 
     return (
         <nav className="navbar grid grid-cols-3 bg-[#d7dde4] z-10">
@@ -33,7 +58,10 @@ const Navbar = () => {
                     <li><NavLink to="">Services</NavLink></li>
                     <li><NavLink to="/about">About</NavLink></li>
                 </ul>
-                <NavLink to="/signin-signup" className='btn btn-sm rounded-full uppercase'>SignIn-SignUp</NavLink>
+                {
+                    user?.email ?
+                        <button onClick={handleSignOut} className='btn btn-sm rounded-full uppercase'>SignOut</button>
+                        : <Link to="/signin-signup" className='btn btn-sm rounded-full uppercase'>Account</Link>}
             </div>
         </nav>
     );
