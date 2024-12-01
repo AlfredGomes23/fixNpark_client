@@ -1,8 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import SectionHeader from "./SectionHeader";
-import { FaClipboardQuestion } from "react-icons/fa6";
-import { FcAnswers } from "react-icons/fc";
 
 const FAQ = () => {
     const [faqs, setFaqs] = useState([]);
@@ -21,9 +19,9 @@ const FAQ = () => {
                     faqs.map(faq =>
                         <div className="collapse collapse-arrow join-item border-base-300 border mx-auto">
                             <input type="radio" name="my-accordion-4" />
-                            <div className="collapse-title text-xl font-bold flex flex-row items-center"><FaClipboardQuestion /> {faq.question}</div>
+                            <div className="collapse-title text-xl font-bold">Que. {faq.question}</div>
                             <div className="collapse-content font-semibold text-gray-800">
-                                <p className="flex flex-row"><FcAnswers /> {faq.answer}</p>
+                                <p>Ans. {faq.answer}</p>
                             </div>
                         </div>
                     )

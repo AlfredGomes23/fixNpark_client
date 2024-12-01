@@ -33,7 +33,7 @@ const Navbar = () => {
                     <li><NavLink to="">Services</NavLink></li>
                     <li><NavLink to="/about">About</NavLink></li>
                 </ul>
-                <NavLink to="" className='btn btn-sm rounded-full uppercase'>Account</NavLink>
+                <NavLink to="/signin-signup" className='btn btn-sm rounded-full uppercase'>SignIn-SignUp</NavLink>
             </div>
         </nav>
     );
