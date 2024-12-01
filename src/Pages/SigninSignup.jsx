@@ -1,15 +1,72 @@
 import { useForm } from "react-hook-form"
+import { AuthContext } from "../Providers/AuthProvider";
+import { useContext, useState } from "react";
+import Swal from 'sweetalert2'
+import { BiLoaderCircle } from "react-icons/bi";
 
 const SigninSignup = () => {
+    const { user, createUser, signinUser } = useContext(AuthContext);
+    const [err, setErr] = useState("");
+    const [doing, setDoing] = useState(false);
+
+
     // signin
     const { register: signin, handleSubmit: handleSigninSubmit, watch: watchIn, formState: { errors: inErr } } = useForm();
-    const onSignin = data => {
+
+    const onSignin = async data => {
+        setDoing(true);
         console.log(data);
+
+        try {
+            await signinUser(data.email, data.password);
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Signin Successful",
+                showConfirmButton: false,
+                timer: 2000
+            });
+        } catch (err) {
+            console.log(err);
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: err,
+                showConfirmButton: false,
+                timer: 3000
+            });
+        }
+        setDoing(false);
     };
+
+
     // signup
     const { register: signup, handleSubmit: handleSignupSubmit, watch: watchUp, formState: { errors: upErr } } = useForm();
-    const onSignup = data => {
+
+    const onSignup = async data => {
+        setDoing(true);
         console.log(data);
+
+        try {
+            await createUser(data.email, data.password);
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Account Registered",
+                showConfirmButton: false,
+                timer: 2000
+            });
+        } catch (err) {
+            console.log(err);
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: err,
+                showConfirmButton: false,
+                timer: 3000
+            });
+        }
+        setDoing(false);
     };
 
     return (
@@ -38,7 +95,10 @@ const SigninSignup = () => {
                                 <input type="password" name="password" placeholder="password" className="input input-bordered" required {...signin("password")} />
                             </div>
                             <div className="form-control">
-                                <button className="btn btn-accent w-fit mx-auto">Signin</button>
+                                {
+                                    doing ?
+                                        <BiLoaderCircle className="text-center text-accent mx-auto text-5xl" /> :
+                                        <button className="btn btn-accent w-fit mx-auto">Signin</button>}
                             </div>
                         </form>
                     </div>
@@ -69,7 +129,7 @@ const SigninSignup = () => {
                                     </label>
                                     <input type="text"
                                         name="url"
-                                        placeholder="Photo URL" className="input input-bordered" required {...signup("url")}/>
+                                        placeholder="Photo URL" className="input input-bordered" required {...signup("url")} />
                                 </div>
                             </div>
                             {/* email password */}
@@ -80,14 +140,14 @@ const SigninSignup = () => {
                                     </label>
                                     <input type="email"
                                         name="email"
-                                        placeholder="email" className="input input-bordered" required {...signup("email")}/>
+                                        placeholder="email" className="input input-bordered" required {...signup("email")} />
                                 </div>
                                 <div className="form-control">
                                     <label className="label">
                                         <span className="label-text font-semibold">Password</span>
                                     </label>
                                     <input type="password"
-                                        name="password" placeholder="password" className="input input-bordered" required {...signup("password")}/>
+                                        name="password" placeholder="password" className="input input-bordered" required {...signup("password")} />
                                 </div>
                             </div>
                             <label className="label mx-auto">
@@ -96,7 +156,7 @@ const SigninSignup = () => {
                             </label>
 
                             <div className="form-control mt-6">
-                                <button className="btn btn-primary w-fit mx-auto">Signup</button>
+                                {doing ? <BiLoaderCircle className="text-center text-primary mx-auto text-5xl" /> : <button className="btn btn-primary w-fit mx-auto">Signup</button>}
                             </div>
                         </form>
                     </div>
