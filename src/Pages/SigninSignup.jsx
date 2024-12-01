@@ -135,6 +135,7 @@ const SigninSignup = () => {
                                     <input type="text"
                                         name="url"
                                         placeholder="Photo URL" className="input input-bordered" required {...signup("url")} />
+                                        placeholder="Photo URL" className="input input-bordered" required {...signup("url")} />
                                 </div>
                             </div>
                             {/* email password */}
@@ -145,6 +146,7 @@ const SigninSignup = () => {
                                     </label>
                                     <input type="email"
                                         name="email"
+                                        placeholder="email" className="input input-bordered" required {...signup("email")} />
                                         placeholder="email" className="input input-bordered" required {...signup("email")} />
                                 </div>
                                 <div className="form-control">
