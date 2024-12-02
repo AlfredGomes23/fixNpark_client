@@ -89,14 +89,14 @@ const SigninSignup = () => {
                                     <span className="label-text font-semibold">Email</span>
                                 </label>
                                 <input type="email"
-                                    name="email"
+                                    name="emailin"
                                     placeholder="email" className="input input-bordered" required {...signin("email")} />
                             </div>
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text font-semibold">Password</span>
                                 </label>
-                                <input type="password" name="password" placeholder="password" className="input input-bordered" required {...signin("password")} />
+                                <input type="password" name="passwordin" placeholder="password" className="input input-bordered" required {...signin("password")} />
                             </div>
                             <div className="form-control">
                                 {

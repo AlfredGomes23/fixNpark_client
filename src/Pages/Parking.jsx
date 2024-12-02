@@ -149,9 +149,22 @@ const Parking = () => {
 
                         <button className="btn join-item"><FaSearch className="text-primary text-xl" /></button>
                     </form>
+
                     {/* search result */}
-                    <div className="p-10 flex flex-row card w-full shadow-xl mx-auto bg-violet-200">
-                        {parkings?.length}
+                    <div className="p-10 grid grid-cols-2 gap-6 card w-full shadow-xl mx-auto bg-violet-200 ">
+                        {
+                        parkings?.map(parking => 
+                            <div className="card bg-primary text-primary-content w-96">
+                                <div className="card-body">
+                                    <h2 className="card-title">{parking.address}</h2>
+                                    <p>If a dog chews shoes whose shoes does he choose?</p>
+                                    <div className="card-actions justify-end">
+                                        <button className="btn">Buy Now</button>
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                        }
                     </div>
                 </div>
             </section>
