@@ -1,19 +1,18 @@
 
 import SectionHeader from "../Components/SectionHeader";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaSearch } from "react-icons/fa";
 import Swal from 'sweetalert2'
+import { AuthContext } from "../Providers/AuthProvider";
+import { MdAttachEmail } from "react-icons/md";
+import { FaMapLocationDot } from "react-icons/fa6";
 
 const Parking = () => {
+    const [refresh, setRefresh] = useState(0);
+    const { user } = useContext(AuthContext);
     const [parkings, setParkings] = useState([]);
-    const [search, setSearch] = useState({ //default search
-        "parkingType": "Both Single and Bulk",
-        "provider": "All Provider",
-        "search": "All",
-        "subscription": "for Hourly",
-        "wheels": "Any Number of Wheeler"
-    });
+    const [search, setSearch] = useState({});
     const { register: searchForm, handleSubmit: handleSearch, reset: resetSearch } = useForm();
     const { register: addParkingForm, handleSubmit: handleAddParking, reset: resetAddParking } = useForm();
 
@@ -24,17 +23,19 @@ const Parking = () => {
         fetch(`http://localhost:5000/parkings?${queryParams}`)
             .then(r => r.json()).then(d => setParkings(d.data))
 
-    }, [search]);
+    }, [search, refresh]);
 
     const onSearch = async data => {
         console.log(data);
         await setSearch(data);
-        resetSearch();  //reset the form
     };
     console.log(parkings);
 
     const onAdd = async data => {
-        // console.log(data);
+        data.userEmail = user?.email;
+        data.provider = "Non-Member";
+        data.date = new Date();
+        console.log(data);
         try {
             await fetch("http://localhost:5000/parking/add", {
                 method: 'POST',
@@ -55,10 +56,12 @@ const Parking = () => {
                             showConfirmButton: false,
                             timer: 1500
                         });
+                        setRefresh(refresh + 1);
                     }
                 });
 
         } catch (err) {
+            console.log(err);
             Swal.fire({
                 position: "center",
                 icon: "error",
@@ -68,7 +71,7 @@ const Parking = () => {
             });
         }
     };
-    
+
     return (
         <div className="mb-6">
             {/* header */}
@@ -76,8 +79,11 @@ const Parking = () => {
 
             <section className="grid grid-cols-5">
                 <div className="col-span-1 flex flex-col px-5 items-center">
+
                     {/* Open the modal using document.getElementById('ID').showModal() method */}
-                    <button className="btn btn-outline btn-primary" onClick={() => document.getElementById('addParkingModal').showModal()}>List Parking Space</button>
+                    <button className="btn btn-primary" onClick={() => document.getElementById('addParkingModal').showModal()}>List Parking Space</button>
+
+
                     {/* modal here */}
                     <dialog id="addParkingModal" className="modal">
                         <form className="modal-box text-center bg-violet-200" onSubmit={handleAddParking(onAdd)}>
@@ -120,11 +126,12 @@ const Parking = () => {
 
                 <div className="col-span-4 space-y-8">
                     {/* Search and Filter  */}
-                    <form onSubmit={handleSearch(onSearch)} className="join p-10 flex flex-row card w-full shadow-xl mx-auto bg-violet-300">
+                    <form onSubmit={handleSearch(onSearch)} className="join p-6 flex flex-row card w-full shadow-xl mx-auto bg-violet-300">
 
-                        <input className="input input-bordered join-item" placeholder="Search by Keyword or Area" {...searchForm("search")} />
+                        <input className="input input-bordered join-item" placeholder="Search by Keyword or Area" defaultValue="All" {...searchForm("search")} />
 
                         <select className="select select-bordered join-item" {...searchForm("subscription")} required>
+                            <option>Any Subscription</option>
                             <option>for Hourly</option>
                             <option>for Monthly</option>
                         </select>
@@ -137,8 +144,8 @@ const Parking = () => {
 
                         <select className="select select-bordered join-item" {...searchForm("wheels")} required>
                             <option>Any Number of Wheeler</option>
-                            <option>Two or Three Wheeler</option>
-                            <option>Four or More Wheeler</option>
+                            <option>Two Wheeler</option>
+                            <option>Four Wheeler</option>
                         </select>
 
                         <select className="select select-bordered join-item" {...searchForm("provider")} required>
@@ -151,19 +158,31 @@ const Parking = () => {
                     </form>
 
                     {/* search result */}
-                    <div className="p-10 grid grid-cols-2 gap-6 card w-full shadow-xl mx-auto bg-violet-200 ">
+                    <div className="p-10 grid grid-cols-3 gap-6 card w-full shadow-xl mx-auto bg-violet-200 ">
                         {
-                        parkings?.map(parking => 
-                            <div className="card bg-primary text-primary-content w-96">
-                                <div className="card-body">
-                                    <h2 className="card-title">{parking.address}</h2>
-                                    <p>If a dog chews shoes whose shoes does he choose?</p>
-                                    <div className="card-actions justify-end">
-                                        <button className="btn">Buy Now</button>
+                            !parkings.length ? <h1 className="text-error text-center text-3xl col-span-2">No Parking Available now For Your Search Filters. Change Search Filter to Get Available Parkings.</h1> :
+                                parkings?.map(parking =>
+                                    <div key={parking._id} className="card bg-slate-200 w-72 outline outline-accent mx-auto">
+                                        <div className="card-body">
+                                            <h2 className="card-title text-primary">
+                                                <FaMapLocationDot />{parking?.address}
+                                            </h2>
+                                            <h4 className="text-accent flex flex-row items-center gap-3">
+                                                <MdAttachEmail /><span>{parking?.userEmail}</span>
+                                            </h4>
+                                            <p className="text-xl text-secondary">Tags:</p>
+                                            <ul className="font-semibold space-x-1 space-y-1">
+                                                <li className="badge badge-primary badge-outline">{parking?.subscription}</li>
+                                                <li className="badge badge-primary badge-outline">{parking?.parkingType}</li>
+                                                <li className="badge badge-primary badge-outline">{parking?.wheels}</li>
+                                                <li className="badge badge-primary badge-outline">{parking?.provider}</li>
+                                            </ul>
+                                            <div className="card-actions justify-end">
+                                                <button className="btn btn-outline btn-secondary">Book Parking</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                        )
+                                )
                         }
                     </div>
                 </div>
