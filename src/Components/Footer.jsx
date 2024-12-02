@@ -7,7 +7,7 @@ const Footer = () => {
             <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-4">
                 {/* Logo and Description */}
                 <div>
-                    <h2 className="text-2xl font-potta-one mb-4 text-accent text-center">FixNpark</h2>
+                    <h2 className="text-2xl font-potta-one mb-4 text-accent text-center">fixNpark</h2>
                     <p className="text-sm text-gray-400">
                         Your trusted partner for convenient parking and vehicle maintenance services, simplifying urban commutes.
                     </p>
@@ -51,7 +51,7 @@ const Footer = () => {
             </div>
             <hr />
             <div className="border-t border-gray-700 mt-2 pt-4 text-center text-white text-sm">
-                &copy; {new Date().getFullYear()} FixNpark. All rights reserved.
+                &copy; {new Date().getFullYear()} fixNpark. All rights reserved.
             </div>
         </footer>
     );

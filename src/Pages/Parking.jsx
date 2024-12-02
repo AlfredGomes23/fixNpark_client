@@ -17,20 +17,21 @@ const Parking = () => {
     const { register: searchForm, handleSubmit: handleSearch, reset: resetSearch } = useForm();
     const { register: addParkingForm, handleSubmit: handleAddParking, reset: resetAddParking } = useForm();
 
+    // getting parking data
     useEffect(() => {
-        console.log(search);
-        fetch("http://localhost:5000/parkings", search)
-            .then(r => r.json()).then(d => setParkings(d))
+        const queryParams = new URLSearchParams(search).toString();
+
+        fetch(`http://localhost:5000/parkings?${queryParams}`)
+            .then(r => r.json()).then(d => setParkings(d.data))
+
     }, [search]);
 
-
-    const onSearch = data => {
-        // console.log(data);
-        setSearch(data);
+    const onSearch = async data => {
+        console.log(data);
+        await setSearch(data);
         resetSearch();  //reset the form
     };
-
-
+    console.log(parkings);
 
     const onAdd = async data => {
         // console.log(data);
@@ -67,8 +68,7 @@ const Parking = () => {
             });
         }
     };
-
-
+    
     return (
         <div className="mb-6">
             {/* header */}

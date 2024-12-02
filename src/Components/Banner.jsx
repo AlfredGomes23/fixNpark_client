@@ -18,7 +18,6 @@ const Banner = () => {
             {/* parallax */}
             <div className="bg-fixed bg-[url('../../public/images/banner-bg.png')] w-full bg-no-repeat bg-cover h-[80vh]">
 
-
                 {/* Search and Filter  */}
                 <form onSubmit={handleSubmit(onSubmit)} className="join p-10 flex flex-row card glass w-fit shadow-xl mx-auto relative top-2/3 outline-secondary outline-dotted ">
 
