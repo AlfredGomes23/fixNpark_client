@@ -20,7 +20,7 @@ const BestDeals = () => {
         fetch("deals.json").then(d => d.json()).then(d => setDeals(d))
     }, [])
 
-    console.log(deals);
+    // console.log(deals);
 
     return (
         <div className="bg-fixed bg-[url('../../public/images/deals-bg.png')] bg-opacity-75 inset-0 z-10 w-full bg-no-repeat bg-cover h-[80vh]">

@@ -24,7 +24,8 @@ const Reviews = () => {
         fetch("reviews.json").then(d => d.json()).then(d => setReviews(d))
     }, [])
 
-    console.log(reviews);
+    // console.log(reviews);
+    
     return (
         <Swiper
             slidesPerView={2}

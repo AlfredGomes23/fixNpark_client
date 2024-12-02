@@ -1,50 +1,63 @@
 
 import SectionHeader from "../Components/SectionHeader";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaSearch } from "react-icons/fa";
 import Swal from 'sweetalert2'
 
 const Parking = () => {
     const [parkings, setParkings] = useState([]);
-    const { register: searchForm, handleSubmit: handleSearch } = useForm();
-    const { register: addParkingForm, handleSubmit: handleAddParking } = useForm();
+    const [search, setSearch] = useState({ //default search
+        "parkingType": "Both Single and Bulk",
+        "provider": "All Provider",
+        "search": "All",
+        "subscription": "for Hourly",
+        "wheels": "Any Number of Wheeler"
+    });
+    const { register: searchForm, handleSubmit: handleSearch, reset: resetSearch } = useForm();
+    const { register: addParkingForm, handleSubmit: handleAddParking, reset: resetAddParking } = useForm();
+
+    useEffect(() => {
+        console.log(search);
+        fetch("http://localhost:5000/parkings", search)
+            .then(r => r.json()).then(d => setParkings(d))
+    }, [search]);
 
 
-
-
-    const onSearch = async data => {
-        console.log(data);
-        await fetch("http://localhost:5000/parkings")
-            .then(r => {
-                setParkings(r)
-            }).catch(e => {
-                console.log(e);
-            });
+    const onSearch = data => {
+        // console.log(data);
+        setSearch(data);
+        resetSearch();  //reset the form
     };
 
 
 
     const onAdd = async data => {
-        console.log(data);
-        await fetch("http://localhost:5000/parking/add", {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        }).then(r => {
-            console.log(r);
-            Swal.fire({
-                position: "center",
-                icon: "warning",
-                title: "You are Signed Out.",
-                showConfirmButton: false,
-                timer: 1500
-            });
-        }).catch(e => {
-            console.log(e);
+        // console.log(data);
+        try {
+            await fetch("http://localhost:5000/parking/add", {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(r => r.json())
+                .then(d => {
+                    console.log(d);
+                    if (d.insertedId) { //check inserted
+                        resetAddParking();
+                        document.getElementById('addParkingModal').close();
+                        Swal.fire({
+                            position: "center",
+                            icon: "success",
+                            title: "Your Parking Listed Successfully.",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+                });
 
+        } catch (err) {
             Swal.fire({
                 position: "center",
                 icon: "error",
@@ -52,8 +65,10 @@ const Parking = () => {
                 showConfirmButton: false,
                 timer: 1000
             });
-        })
-    }
+        }
+    };
+
+
     return (
         <div className="mb-6">
             {/* header */}
