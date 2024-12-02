@@ -3,7 +3,12 @@ import {
 } from "react-router-dom";
 import Home from "../Pages/Home";
 import MainLayout from "../layouts/MainLayout";
-import AboutUs from "../Pages/AboutUs";
+import About from "../Pages/About";
+import SigninSignup from "../Pages/SigninSignup";
+import PrivateRoutes from "./PrivateRoutes";
+import Parking from "../Pages/Parking";
+import Services from "../Pages/Services";
+import Profile from "../Pages/Profile";
 
 export const router = createBrowserRouter([
     {
@@ -11,12 +16,32 @@ export const router = createBrowserRouter([
         element: <MainLayout></MainLayout>,
         children: [
             {
-                path:'/',
-                element:<Home></Home>
+                path: '/',
+                element: <Home></Home>
             },
             {
-                path:'/about-us',
-                element:<AboutUs></AboutUs>
+                path: '/about',
+                element: <About></About>
+            },
+            {
+                path: '/parkings',
+                element: <PrivateRoutes>
+                    <Parking></Parking>
+                </PrivateRoutes>
+            },
+            {
+                path: '/profile',
+                element: <PrivateRoutes>
+                    <Profile></Profile>
+                </PrivateRoutes>
+            },
+            {
+                path:'/services',
+                element:<Services></Services>
+            },
+            {
+                path: '/signin-signup',
+                element: <SigninSignup></SigninSignup>
             },
         ]
     },

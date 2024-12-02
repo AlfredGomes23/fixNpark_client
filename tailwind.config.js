@@ -7,7 +7,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        delius: ['Delius', 'cursive'], // Add Delius font
+        delius: ['Delius', 'cursive'],
+        'potta-one': ["Potta One", "system-ui"],
       },
     }
   },
@@ -18,7 +19,6 @@ export default {
     themes: [
       "light",
       "dark",
-      "nord",
     ],
   },
 }
