@@ -10,7 +10,6 @@ import '../Styles/swiper.css';
 // import required modules
 import { Pagination, Navigation } from 'swiper/modules';
 
-import axios from "axios";
 import { useEffect, useState } from 'react';
 import Rating from './Rating';
 import { FaUser } from 'react-icons/fa';

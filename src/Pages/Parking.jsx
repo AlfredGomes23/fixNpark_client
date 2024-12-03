@@ -7,12 +7,16 @@ import Swal from 'sweetalert2'
 import { AuthContext } from "../Providers/AuthProvider";
 import { MdAttachEmail } from "react-icons/md";
 import { FaMapLocationDot } from "react-icons/fa6";
+import ParkingCard from "../Components/ParkingCard";
 
 const Parking = () => {
     const [refresh, setRefresh] = useState(0);
     const { user } = useContext(AuthContext);
     const [parkings, setParkings] = useState([]);
-    const [search, setSearch] = useState({});
+    const [search, setSearch] = useState({
+        "search": "All",
+
+    });
     const { register: searchForm, handleSubmit: handleSearch, reset: resetSearch } = useForm();
     const { register: addParkingForm, handleSubmit: handleAddParking, reset: resetAddParking } = useForm();
 
@@ -29,11 +33,11 @@ const Parking = () => {
         console.log(data);
         await setSearch(data);
     };
-    console.log(parkings);
+    // console.log(parkings);
 
     const onAdd = async data => {
         data.userEmail = user?.email;
-        data.provider = "Non-Member";
+        data.provider = "Non-Members";
         data.date = new Date();
         console.log(data);
         try {
@@ -137,7 +141,7 @@ const Parking = () => {
                         </select>
 
                         <select className="select select-bordered join-item" {...searchForm("parkingType")} required>
-                            <option>Both Single and Bulk</option>
+                            <option>Single and Bulk</option>
                             <option>Single Parking</option>
                             <option>Bulk Parking</option>
                         </select>
@@ -162,27 +166,7 @@ const Parking = () => {
                         {
                             !parkings.length ? <h1 className="text-error text-center text-3xl col-span-2">No Parking Available now For Your Search Filters. Change Search Filter to Get Available Parkings.</h1> :
                                 parkings?.map(parking =>
-                                    <div key={parking._id} className="card bg-slate-200 w-72 outline outline-accent mx-auto">
-                                        <div className="card-body">
-                                            <h2 className="card-title text-primary">
-                                                <FaMapLocationDot />{parking?.address}
-                                            </h2>
-                                            <h4 className="text-accent flex flex-row items-center gap-3">
-                                                <MdAttachEmail /><span>{parking?.userEmail}</span>
-                                            </h4>
-                                            <p className="text-xl text-secondary">Tags:</p>
-                                            <ul className="font-semibold space-x-1 space-y-1">
-                                                <li className="badge badge-primary badge-outline">{parking?.subscription}</li>
-                                                <li className="badge badge-primary badge-outline">{parking?.parkingType}</li>
-                                                <li className="badge badge-primary badge-outline">{parking?.wheels}</li>
-                                                <li className="badge badge-primary badge-outline">{parking?.provider}</li>
-                                            </ul>
-                                            <div className="card-actions justify-end">
-                                                <button className="btn btn-outline btn-secondary">Book Parking</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )
+                                    <ParkingCard parking={parking} refresh={refresh} setRefresh={setRefresh}></ParkingCard>)
                         }
                     </div>
                 </div>
