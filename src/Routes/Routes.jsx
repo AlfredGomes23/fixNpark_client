@@ -8,7 +8,6 @@ import SigninSignup from "../Pages/SigninSignup";
 import PrivateRoutes from "./PrivateRoutes";
 import Parking from "../Pages/Parking";
 import Services from "../Pages/Services";
-import Profile from "../Pages/Profile";
 
 export const router = createBrowserRouter([
     {
@@ -27,12 +26,6 @@ export const router = createBrowserRouter([
                 path: '/parkings',
                 element: <PrivateRoutes>
                     <Parking></Parking>
-                </PrivateRoutes>
-            },
-            {
-                path: '/profile',
-                element: <PrivateRoutes>
-                    <Profile></Profile>
                 </PrivateRoutes>
             },
             {

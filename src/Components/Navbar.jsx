@@ -58,6 +58,7 @@ const Navbar = () => {
                     <li><NavLink to="/services">Services</NavLink></li>
                     <li><NavLink to="/about">About</NavLink></li>
                 </ul>
+                <p>{user?.email && user?.email}</p>
                 {
                     user?.email ?
                         <button onClick={handleSignOut} className='btn btn-sm rounded-full uppercase'>SignOut</button>

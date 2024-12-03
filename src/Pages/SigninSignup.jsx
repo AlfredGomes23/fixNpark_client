@@ -60,6 +60,8 @@ const SigninSignup = () => {
                 showConfirmButton: false,
                 timer: 2000
             });
+            // navigate where user was going
+            navigate(location?.state ? location.state : '/');
         } catch (err) {
             console.log(err);
             Swal.fire({
